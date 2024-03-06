@@ -12,7 +12,7 @@ export default function EventBox(props){
 
     return(
         <div>
-            <h4 
+            <h4 className="text-3xl font-bold underline"
                 onMouseEnter={(e) => setTitleStyle(styleTitleBox)} 
                 onMouseLeave={(e) => setTitleStyle({})} 
                 style={titleStyle}
