@@ -14,7 +14,7 @@ export default function Main(){
             title : "Vue Todo List",
             isActive : true
         }
-    ]
+    ] 
 
     let todoApp = todoSetting.map((item) => (
         item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : ''

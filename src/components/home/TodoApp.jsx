@@ -3,7 +3,7 @@ import TodoListApp from "./TodoListApp";
 
 function TodoApp({todoSetting}) {
 
-    let todoListItem = [
+    const [todoListItem, setTodoListItem] = useState([
         {
             id : 1,
             title : "Tailwind CSS To DO App List 1",
@@ -13,20 +13,63 @@ function TodoApp({todoSetting}) {
             id : 2,
             title : "Tailwind CSS To DO App List 2",
             state: false,
-        },
-    ]
+        }, 
+    ]) 
 
-    const [newTodoListItem, setTodo] = useState(todoListItem) 
+    const [newTodoTitle, setNewTodoTitle] = useState('')
 
-    function addTodo(e){
-        if(e.key ==="Enter"){
-            
-            const name = e.target.name;
-            const value = e.target.value;
-            console.log(value)
-    // setInputs(values => ({...values, [name]: value}))
+    const onInputNewTodoChangeHandler = (event) => {
+        setNewTodoTitle(event.target.value)
+    }
+
+    let i = todoListItem.length
+
+    const addNewTodo = (event) =>{
+
+        if(event.key ==="Enter" && newTodoTitle != ""){
+            i += 1
+            setTodoListItem([
+                ...todoListItem,
+                {
+                    id: i,
+                    title: newTodoTitle,
+                    state: false
+                }
+            ])
+
+            setNewTodoTitle('')
         }
     }
+
+    const deleteTodo = (todo) => {
+        let newTodoList = todoListItem.filter( (item) => {
+            return todo.id != item.id 
+        })
+        setTodoListItem(newTodoList)
+    }
+
+    const onChangeCheckedHandler = (todo) => {
+        let newTodoList = todoListItem.map((todoItem) => {
+            if(todo.id === todoItem.id){
+                todoItem.state = !todoItem.state
+            }
+
+            return todoItem
+        })
+
+        setTodoListItem(newTodoList)
+    }
+
+     // let x= setTodoListItem([
+        //     ...newTodoList,
+        //     {
+        //         id: todo.id,
+        //         title: todo.title,
+        //         state: true
+        //     }
+        // ])
+
+        // console.log(newTodoList)
 
   return (
     <>
@@ -37,12 +80,14 @@ function TodoApp({todoSetting}) {
                     <h1 className="mr-6 text-4xl font-bold text-purple-600"> {todoSetting.title}</h1>
                 </div>
                 <div className="relative">
-                    <input type="text" name="todo" placeholder="What needs to be done today?"
+                    <input type="text" placeholder="What needs to be done today?"
                     className="w-full px-2 py-3 border rounded outline-none border-grey-600" 
-                    onKeyDown={addTodo}
+                    onKeyDown={addNewTodo}
+                    onChange={onInputNewTodoChangeHandler}
+                    value={newTodoTitle}
                     />
                 </div>
-                <TodoListApp key={todoListItem.id} todos={newTodoListItem}/>
+                <TodoListApp key={todoListItem.id} todos={todoListItem} deleteTodo={deleteTodo} changeChecked={onChangeCheckedHandler} />
             </div>
         </div>
     
