@@ -48,6 +48,18 @@ function TodoApp({todoSetting}) {
         setTodoListItem(newTodoList)
     }
 
+    const updateTodo = (todo, newTodoTitle) => {
+            let newTodoList = todoListItem.map((todoItem) => {
+                if(todo.id === todoItem.id){
+                    todoItem.title = newTodoTitle
+                }
+    
+                return todoItem
+            })
+    
+            setTodoListItem(newTodoList)
+    } 
+
     const onChangeCheckedHandler = (todo) => {
         let newTodoList = todoListItem.map((todoItem) => {
             if(todo.id === todoItem.id){
@@ -59,17 +71,6 @@ function TodoApp({todoSetting}) {
 
         setTodoListItem(newTodoList)
     }
-
-     // let x= setTodoListItem([
-        //     ...newTodoList,
-        //     {
-        //         id: todo.id,
-        //         title: todo.title,
-        //         state: true
-        //     }
-        // ])
-
-        // console.log(newTodoList)
 
   return (
     <>
@@ -87,7 +88,7 @@ function TodoApp({todoSetting}) {
                     value={newTodoTitle}
                     />
                 </div>
-                <TodoListApp key={todoListItem.id} todos={todoListItem} deleteTodo={deleteTodo} changeChecked={onChangeCheckedHandler} />
+                <TodoListApp key={todoListItem.id} todos={todoListItem} deleteTodo={deleteTodo} changeChecked={onChangeCheckedHandler} updateTodo={updateTodo} />
             </div>
         </div>
     

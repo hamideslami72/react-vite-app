@@ -21,9 +21,10 @@ export default function Main(){
     ))
     return(
         <>
-            <div className="bg-gray-100">
-                { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
-            </div>
+                <div className="bg-gray-100">
+                    { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
+                </div>
+            
         </>
     )
 }

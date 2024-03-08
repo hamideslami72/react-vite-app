@@ -6,9 +6,9 @@ export default function Home(){
     return(
         <>
             {/* <Header /> */}
-            <hr />
+            
             <Main />
-            <hr />
+            
             {/* <Footer /> */}
         </>
     )
