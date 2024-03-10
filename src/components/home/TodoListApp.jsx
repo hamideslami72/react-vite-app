@@ -1,7 +1,7 @@
 import TodoListItem from "./TodoListItem";
 
 function TodoListApp({todos, deleteTodo, changeChecked, updateTodo}){
-    
+
     return(
         <>
             <ul className="list-reset">

@@ -1,44 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TodoListApp from "./TodoListApp";
+import CreateTodoInput from "./CreateTodoInput";
 
 function TodoApp({todoSetting}) {
 
-    const [todoListItem, setTodoListItem] = useState([
-        {
-            id : 1,
-            title : "Tailwind CSS To DO App List 1",
-            state: true,
-        },
-        {
-            id : 2,
-            title : "Tailwind CSS To DO App List 2",
-            state: false,
-        }, 
-    ]) 
+    const [todoListItem, setTodoListItem] = useState([]) 
 
-    const [newTodoTitle, setNewTodoTitle] = useState('')
+    let i = todoListItem.length + 1
 
-    const onInputNewTodoChangeHandler = (event) => {
-        setNewTodoTitle(event.target.value)
-    }
-
-    let i = todoListItem.length
-
-    const addNewTodo = (event) =>{
-
-        if(event.key ==="Enter" && newTodoTitle != ""){
-            i += 1
-            setTodoListItem([
-                ...todoListItem,
-                {
-                    id: i,
-                    title: newTodoTitle,
-                    state: false
-                }
-            ])
-
-            setNewTodoTitle('')
-        }
+    const addNewTodoHandler = (todoTitle) =>{
+        i += 1
+        let newTodo = [
+            ...todoListItem,
+            {
+                id: i,
+                title: todoTitle,
+                state: false
+            }
+        ]
+        setTodoListItem(newTodo)
     }
 
     const deleteTodo = (todo) => {
@@ -72,6 +52,16 @@ function TodoApp({todoSetting}) {
         setTodoListItem(newTodoList)
     }
 
+    useEffect(() => {
+        setTodoListItem(JSON.parse(localStorage.getItem('todos_list')) ?? [])
+    }, [])
+
+    useEffect(() =>{
+        localStorage.setItem('todos_list', JSON.stringify(todoListItem))
+    }, [todoListItem])
+
+
+
   return (
     <>
       
@@ -80,14 +70,7 @@ function TodoApp({todoSetting}) {
                 <div className="flex items-center mb-6">
                     <h1 className="mr-6 text-4xl font-bold text-purple-600"> {todoSetting.title}</h1>
                 </div>
-                <div className="relative">
-                    <input type="text" placeholder="What needs to be done today?"
-                    className="w-full px-2 py-3 border rounded outline-none border-grey-600" 
-                    onKeyDown={addNewTodo}
-                    onChange={onInputNewTodoChangeHandler}
-                    value={newTodoTitle}
-                    />
-                </div>
+                <CreateTodoInput addNewTodoHandler={addNewTodoHandler} />
                 <TodoListApp key={todoListItem.id} todos={todoListItem} deleteTodo={deleteTodo} changeChecked={onChangeCheckedHandler} updateTodo={updateTodo} />
             </div>
         </div>

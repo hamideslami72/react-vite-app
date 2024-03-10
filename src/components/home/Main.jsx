@@ -12,13 +12,14 @@ export default function Main(){
         {
             id : 2,
             title : "Vue Todo List",
-            isActive : true
+            isActive : false
         }
     ] 
 
     let todoApp = todoSetting.map((item) => (
         item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : ''
     ))
+
     return(
         <>
                 <div className="bg-gray-100">
