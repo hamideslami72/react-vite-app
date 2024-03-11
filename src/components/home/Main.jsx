@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TodoApp from "./TodoApp";
+import StopWatch from "./StopWatch";
 
 
 export default function Main(){
@@ -7,7 +8,7 @@ export default function Main(){
         {
             id : 1,
             title : "React Todo List",
-            isActive : true
+            isActive : false
         },
         {
             id : 2,
@@ -16,15 +17,16 @@ export default function Main(){
         }
     ] 
 
-    let todoApp = todoSetting.map((item) => (
-        item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : ''
-    ))
+    // let todoApp = todoSetting.map((item) => (
+    //     item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : ''
+    // ))
 
     return(
         <>
-                <div className="bg-gray-100">
-                    { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
-                </div>
+            <div className="bg-gray-100 pt-5">
+                <StopWatch />
+                { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
+            </div>
             
         </>
     )
