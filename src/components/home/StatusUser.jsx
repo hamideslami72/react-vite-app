@@ -1,29 +1,10 @@
 import { useEffect, useState } from "react"
+import useOnlineStatus from "../hook/useOnlineStatus"
 
 
 export default function StatusUser(){
 
-    const [isOnline , setIsOnline] = useState(true)
-
-    useEffect(() => {
-
-        function onlineHandler(){
-            setIsOnline(true)
-        }
-
-        function offlineHandler(){
-            setIsOnline(false)
-        }
-
-        window.addEventListener('online', onlineHandler)
-        window.addEventListener('offline', offlineHandler)
-
-        return() => {
-            window.removeEventListener('online', onlineHandler)
-            window.removeEventListener('offline', offlineHandler)
-        }
-        
-    } , [])
+    const isOnline = useOnlineStatus()
 
     return(
         <div className="grid grid-row gap-4 items-center justify-center py-4 bg-cyan-200 w-1/5 mx-auto">
