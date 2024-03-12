@@ -1,6 +1,8 @@
 import { useState } from "react";
 import TodoApp from "./TodoApp";
 import StopWatch from "./StopWatch";
+import Video from "./Video";
+import StatusUser from "./StatusUser";
 
 
 export default function Main(){
@@ -24,7 +26,9 @@ export default function Main(){
     return(
         <>
             <div className="bg-gray-100 pt-5">
-                <StopWatch />
+                {/* <StopWatch /> */}
+                {/* <Video /> */}
+                <StatusUser />
                 { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
             </div>
             
