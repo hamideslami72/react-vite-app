@@ -9,8 +9,13 @@ export default function useFormInput(initialValue){
         setValue(event.target.value)
     }
 
+    const resetValue = () => {
+        setValue('')
+    }
+
     return {
         value,
+        resetValue,
         onChange: onchangeHandler
     }
 

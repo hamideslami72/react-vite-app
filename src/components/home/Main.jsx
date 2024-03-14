@@ -4,6 +4,7 @@ import SearchInput from "./SearchInput";
 import StopWatch from "./StopWatch";
 import Video from "./Video";
 import StatusUser from "./StatusUser";
+import PostForm from "./PostForm";
 
 
 export default function Main(){
@@ -27,7 +28,8 @@ export default function Main(){
                 {/* <StopWatch /> */}
                 {/* <Video /> */}
                 {/* <StatusUser /> */}
-                <SearchInput />
+                {/* <SearchInput /> */}
+                <PostForm />
                 { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
             </div>
         </>
