@@ -1,5 +1,6 @@
 import { useState } from "react";
 import TodoApp from "./TodoApp";
+import SearchInput from "./SearchInput";
 
 
 export default function Main(){
@@ -7,7 +8,7 @@ export default function Main(){
         {
             id : 1,
             title : "React Todo List",
-            isActive : true
+            isActive : false
         },
         {
             id : 2,
@@ -23,6 +24,9 @@ export default function Main(){
     return(
         <>
                 <div className="bg-gray-100">
+
+                    <SearchInput />
+
                     { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
                 </div>
             
