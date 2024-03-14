@@ -1,9 +1,13 @@
 import { useState } from "react";
 import TodoApp from "./TodoApp";
 import SearchInput from "./SearchInput";
+import StopWatch from "./StopWatch";
+import Video from "./Video";
+import StatusUser from "./StatusUser";
 
 
 export default function Main(){
+
     let todoSetting = [
         {
             id : 1,
@@ -17,19 +21,15 @@ export default function Main(){
         }
     ] 
 
-    let todoApp = todoSetting.map((item) => (
-        item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : ''
-    ))
-
     return(
         <>
-                <div className="bg-gray-100">
-
-                    <SearchInput />
-
-                    { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
-                </div>
-            
+            <div className="bg-gray-100 pt-5">
+                {/* <StopWatch /> */}
+                {/* <Video /> */}
+                {/* <StatusUser /> */}
+                <SearchInput />
+                { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
+            </div>
         </>
     )
 }

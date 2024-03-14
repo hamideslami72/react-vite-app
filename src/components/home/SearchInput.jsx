@@ -1,30 +1,21 @@
-import { useEffect, useState } from "react"
+import { useDebugValue, useEffect, useState } from "react"
+import useSearch from "../hook/useSearch"
+import useFormInput from "../hook/useFormInput"
 
 
 export default function SearchInput(){
 
-    const [searchTerm, setSearchTerm] = useState('')
-    const [debounceValue, setDebounceValue] = useState('')
+    const searchTermProps = useFormInput('')
+
+    const searchText = useSearch(searchTermProps.value, 1000)
 
     useEffect(() => {
 
-        let setTimeOutId = setTimeout(()=>{
-            setDebounceValue(searchTerm)
-        }, 1000)
-
-        return() => {
-            clearTimeout(setTimeOutId)
+        if(searchTermProps.value != ''){
+            console.log(`Send Request Ajax ${searchTermProps.value}`)
         }
 
-    }, [searchTerm])
-
-    useEffect(() => {
-        
-        if(searchTerm != ''){
-            console.log(`Send Request Ajax ${searchTerm}`)
-        }
-
-    } , [debounceValue])
+    } , [searchText])
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -33,10 +24,11 @@ export default function SearchInput(){
                     <h1 className="mr-6 text-4xl font-bold text-purple-600">Search Input</h1>
                 </div>
                 <input 
-                    type="text" 
+                    type="text"
+                    {...searchTermProps} 
+                    // onChange={(event) => {setSearchTerm(event.target.value)}}
                     className="w-full py-2 px-4 border border-purple-200" 
                     placeholder="What do you want?"
-                    onChange={(event) => {setSearchTerm(event.target.value)}}
                 />
             </div>
         </div>

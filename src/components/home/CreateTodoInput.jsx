@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 
 export default function CreateTodoInput({addNewTodoHandler}){
@@ -16,7 +16,11 @@ export default function CreateTodoInput({addNewTodoHandler}){
         }
     }
 
+    const inputRef = useRef(null)
 
+    useEffect(() => {
+        inputRef.current.focus()
+    }, [])
     
     return (
         <div className="relative">
@@ -25,6 +29,7 @@ export default function CreateTodoInput({addNewTodoHandler}){
             onKeyDown={addNewTodo}
             onChange={onInputNewTodoChangeHandler}
             value={newTodoTitle}
+            ref={inputRef}
             />
         </div>
     )
