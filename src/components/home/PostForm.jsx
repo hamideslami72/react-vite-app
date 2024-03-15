@@ -19,7 +19,7 @@ export default function PostForm(){
             body: bodyFormProps?.value
         }
 
-        let res = await fetch('https://65f2e496105614e6549f327c.mockapi.io/articl',{
+        let res = await fetch('https://65f2e496105614e6549f327c.mockapi.io/article',{
             method: 'POST',
             headers: {'content-type':'application/json'},
             body: JSON.stringify(data)
@@ -85,7 +85,10 @@ export default function PostForm(){
                                 </textarea>
                         </div>
                         <div className="items-center">
-                            <button type="submit" className="py-2 px-4 bg-green-300 rounded-lg w-32">Create</button>
+                            <button 
+                                type="submit" 
+                                className="py-2 px-4 bg-green-300 rounded-lg w-32"
+                            >Create</button>
                         </div>
                     </form>
                 </div>

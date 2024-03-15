@@ -5,7 +5,8 @@ import StopWatch from "./StopWatch";
 import Video from "./Video";
 import StatusUser from "./StatusUser";
 import PostForm from "./PostForm";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Main(){
 
@@ -13,7 +14,7 @@ export default function Main(){
         {
             id : 1,
             title : "React Todo List",
-            isActive : false
+            isActive : true
         },
         {
             id : 2,
@@ -29,9 +30,10 @@ export default function Main(){
                 {/* <Video /> */}
                 {/* <StatusUser /> */}
                 {/* <SearchInput /> */}
-                <PostForm />
+                {/* <PostForm /> */}
                 { todoSetting.map((item) => (item.isActive ? <TodoApp key={item.id} todoSetting={item}/> : '' )) }
             </div>
+            <ToastContainer />
         </>
     )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TodoListApp from "./TodoListApp";
 import CreateTodoInput from "./CreateTodoInput";
+import { toast } from 'react-toastify';
 
 function TodoApp({todoSetting}) {
 
@@ -8,53 +9,138 @@ function TodoApp({todoSetting}) {
 
     let i = todoListItem.length + 1
 
-    const addNewTodoHandler = (todoTitle) =>{
-        i += 1
-        let newTodo = [
-            ...todoListItem,
-            {
-                id: i,
-                title: todoTitle,
-                state: false
-            }
-        ]
-        setTodoListItem(newTodo)
-    }
+    const addNewTodoHandler = async (todoTitle) =>{
+        let data = {
+            title: todoTitle,
+            state: false  
+        }
 
-    const deleteTodo = (todo) => {
-        let newTodoList = todoListItem.filter( (item) => {
-            return todo.id != item.id 
-        })
-        setTodoListItem(newTodoList)
-    }
-
-    const updateTodo = (todo, newTodoTitle) => {
-            let newTodoList = todoListItem.map((todoItem) => {
-                if(todo.id === todoItem.id){
-                    todoItem.title = newTodoTitle
-                }
-                return todoItem
+        try {
+            let res = await fetch('https://65f2e496105614e6549f327c.mockapi.io/todos',{
+                method: 'POST',
+                headers: {'content-type':'application/json'},
+                body: JSON.stringify(data)
             })
-            setTodoListItem(newTodoList)
+
+            let todoData = await res.json();
+           
+            if(res.ok){
+                setTodoListItem([
+                    ...todoListItem,
+                    todoData
+                ])
+                toast.success("Success Updated.")
+            }
+
+            toast.error(todoData)
+
+
+        } catch (error) {
+            toast.error(error)
+        }
+    }
+
+    const deleteTodo = async (todo) => {
+        let url = `https://65f2e496105614e6549f327c.mockapi.io/todos/${todo?.id}`
+        try {
+            let res = await fetch(url, {
+                method: 'DELETE',
+            })
+
+            if (res.ok) {
+                let newTodoList = todoListItem.filter( (item) => {
+                    return todo.id != item.id 
+                })
+                setTodoListItem(newTodoList)
+                let message = await res.json()
+                toast.success('Success Delete')
+                // getTodoFromApi();
+            }
+            
+            let message = await res.json()
+            toast.error(message)
+
+        } catch (error) {
+            toast.error(error)
+        }
+        
+    }
+
+    const updateTodo = async (todo, newTodoTitle) => {
+        let url = `https://65f2e496105614e6549f327c.mockapi.io/todos/${todo?.id}`
+        try {
+            let res = await fetch(url, {
+                method: 'PUT',
+                headers: {'content-type':'application/json'},
+                body: JSON.stringify({title: newTodoTitle})
+            })
+
+            if (res.ok) {
+                let newTodoList = todoListItem.map((todoItem) => {
+                    if(todo.id === todoItem.id){
+                        todoItem.title = newTodoTitle
+                    }
+                    return todoItem
+                })
+                setTodoListItem(newTodoList)
+                toast.success("Success Updated.")
+                // getTodoFromApi();
+            }
+
+            let message = await res.json()
+            toast.error(message)
+
+        } catch (error) {
+            toast.error(error)
+        }
     } 
 
-    const onChangeCheckedHandler = (todo) => {
-        let newTodoList = todoListItem.map((todoItem) => {
-            if(todo.id === todoItem.id){
-                todoItem.state = !todoItem.state
+    const onChangeCheckedHandler = async (todo) => {
+        let url = `https://65f2e496105614e6549f327c.mockapi.io/todos/${todo?.id}`
+        try {
+            let res = await fetch(url, {
+                method: 'PUT',
+                headers: {'content-type':'application/json'},
+                body: JSON.stringify({state: !todo.state})
+            })
+
+            if (res.ok) {
+                let newTodoList = todoListItem.map((todoItem) => {
+                    if(todo.id === todoItem.id){
+                        todoItem.state = !todoItem.state
+                    }
+                    return todoItem
+                })
+                setTodoListItem(newTodoList)
+                toast.info("Success Updated.")
+                // getTodoFromApi();
             }
-            return todoItem
-        })
-        setTodoListItem(newTodoList)
+
+            let message = await res.json()
+            toast.error(message)
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+    const getTodoFromApi = async () => {
+        const url = new URL('https://65f2e496105614e6549f327c.mockapi.io/todos');
+        url.searchParams.append('order', 'desc');
+        let res = await fetch(url);
+        let data = await res.json();
+        setTodoListItem(data)
     }
 
     useEffect(() => {
-        setTodoListItem(JSON.parse(localStorage.getItem('todos_list')) ?? [])
+        getTodoFromApi();
+        // setTodoListItem(JSON.parse(localStorage.getItem('todos_list')) ?? [])
     }, [])
 
-    useEffect(() =>{
-        localStorage.setItem('todos_list', JSON.stringify(todoListItem))
-    }, [todoListItem])
+    // useEffect(() =>{
+    //     localStorage.setItem('todos_list', JSON.stringify(todoListItem))
+    // }, [todoListItem])
 
   return (
     
@@ -65,6 +151,7 @@ function TodoApp({todoSetting}) {
                 </div>
                 <CreateTodoInput addNewTodoHandler={addNewTodoHandler} />
                 <TodoListApp key={todoListItem.id} todos={todoListItem} deleteTodo={deleteTodo} changeChecked={onChangeCheckedHandler} updateTodo={updateTodo} />
+                
             </div>
         </div>
   );
