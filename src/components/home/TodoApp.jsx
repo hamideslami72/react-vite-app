@@ -1,39 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import TodoListApp from "./TodoListApp";
 import CreateTodoInput from "./CreateTodoInput";
 import { toast } from 'react-toastify';
+import todoReducer from "../../reducers/todoReducer";
 
 function TodoApp({todoSetting}) {
 
-    const [todoListItem, setTodoListItem] = useState([]) 
+    // const [todoListItem, setTodoListItem] = useState([]) 
 
-    let i = todoListItem.length + 1
+    const [todoListItem, todoDispatcher] = useReducer(todoReducer ,[])
 
     const addNewTodoHandler = async (todoTitle) =>{
-        let data = {
-            title: todoTitle,
-            state: false  
-        }
-
         try {
             let res = await fetch('https://65f2e496105614e6549f327c.mockapi.io/todos',{
                 method: 'POST',
                 headers: {'content-type':'application/json'},
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    title: todoTitle,
+                    state: false  
+                })
             })
 
             let todoData = await res.json();
            
             if(res.ok){
-                setTodoListItem([
-                    ...todoListItem,
-                    todoData
-                ])
+                todoDispatcher({
+                    type: 'add-todo',
+                    id: todoData?.id,
+                    title: todoData?.title,
+                    state: todoData?.state
+                })
                 toast.success("Success Updated.")
             }
 
             toast.error(todoData)
-
 
         } catch (error) {
             toast.error(error)
@@ -48,13 +48,14 @@ function TodoApp({todoSetting}) {
             })
 
             if (res.ok) {
-                let newTodoList = todoListItem.filter( (item) => {
+                let data = todoListItem.filter( (item) => {
                     return todo.id != item.id 
                 })
-                setTodoListItem(newTodoList)
-                let message = await res.json()
+                todoDispatcher({
+                    type: 'delete-todo',
+                    data
+                })
                 toast.success('Success Delete')
-                // getTodoFromApi();
             }
             
             let message = await res.json()
@@ -76,15 +77,17 @@ function TodoApp({todoSetting}) {
             })
 
             if (res.ok) {
-                let newTodoList = todoListItem.map((todoItem) => {
+                let data = todoListItem.map((todoItem) => {
                     if(todo.id === todoItem.id){
                         todoItem.title = newTodoTitle
                     }
                     return todoItem
                 })
-                setTodoListItem(newTodoList)
+                todoDispatcher({
+                    type: 'update-todo',
+                    data
+                })
                 toast.success("Success Updated.")
-                // getTodoFromApi();
             }
 
             let message = await res.json()
@@ -105,15 +108,17 @@ function TodoApp({todoSetting}) {
             })
 
             if (res.ok) {
-                let newTodoList = todoListItem.map((todoItem) => {
+                let data = todoListItem.map((todoItem) => {
                     if(todo.id === todoItem.id){
                         todoItem.state = !todoItem.state
                     }
                     return todoItem
                 })
-                setTodoListItem(newTodoList)
+                todoDispatcher({
+                    type: 'toggle-check-todo',
+                    data
+                })
                 toast.info("Success Updated.")
-                // getTodoFromApi();
             }
 
             let message = await res.json()
@@ -130,17 +135,15 @@ function TodoApp({todoSetting}) {
         url.searchParams.append('order', 'desc');
         let res = await fetch(url);
         let data = await res.json();
-        setTodoListItem(data)
+        todoDispatcher({
+            type: 'initial-list',
+            data
+        })
     }
 
     useEffect(() => {
         getTodoFromApi();
-        // setTodoListItem(JSON.parse(localStorage.getItem('todos_list')) ?? [])
     }, [])
-
-    // useEffect(() =>{
-    //     localStorage.setItem('todos_list', JSON.stringify(todoListItem))
-    // }, [todoListItem])
 
   return (
     

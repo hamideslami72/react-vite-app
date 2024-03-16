@@ -23,6 +23,7 @@ export default function Main(){
         }
     ] 
 
+
     return(
         <>
             <div className="bg-gray-100 pt-5">
